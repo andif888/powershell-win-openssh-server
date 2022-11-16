@@ -22,12 +22,13 @@ Move-Item "$($env:temp)\OpenSSH-Win64" -Destination "$($env:ProgramFiles)\OpenSS
 # Unblock the files in C:\Program Files\OpenSSH\
 Get-ChildItem -Path "$($env:ProgramFiles)\OpenSSH\" | Unblock-File
 
-& 'C:\Program Files\OpenSSH\install-sshd.ps1'
+$install_sshd = $($env:ProgramFiles) + '\OpenSSH\install-sshd.ps1'
+
+& $install_sshd
 
 # Configure PowerShell as the default shell
 New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "$($env:SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
 
-%{ if length(ssh_public_key) > 0 }
 # Configure SSH public key
 
 $content = @"
@@ -47,7 +48,6 @@ $acl.SetAccessRule($administratorsRule)
 $acl.SetAccessRule($systemRule)
 $acl | Set-Acl
 
-%{ endif }
 
 # Open firewall port 22
 $FirewallParams = @{ 
