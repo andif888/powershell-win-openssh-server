@@ -17,7 +17,7 @@ $webClient.DownloadFile($source, (Get-Location).Path + '\OpenSSH-Win64.zip')
 Expand-Archive -Path .\OpenSSH-Win64.zip -DestinationPath ($env:temp) -Force
 
 # Move the extracted ZIP contents from the temporary location to C:\Program Files\OpenSSH\
-Move-Item "$($env:temp)\OpenSSH-Win64" -Destination "$($env:ProgramFiles)\OpenSSH\" -Force
+Copy-Item "$($env:temp)\OpenSSH-Win64\*" -Destination "$($env:ProgramFiles)\OpenSSH\" -Force -Recurse
 
 # Unblock the files in C:\Program Files\OpenSSH\
 Get-ChildItem -Path "$($env:ProgramFiles)\OpenSSH\" | Unblock-File
